@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 export const columns = [
   {
@@ -22,7 +23,9 @@ export const DepartmentActionButtons = ({ _id }) => {
   const navigate = useNavigate();
 
   const deleteDepartment = async () => {
-    const confirmByUser = window.confirm("Are you sure you want to delete?");
+    const confirmByUser = window.confirm(
+      "Are you sure! Do you want to delete?"
+    );
     try {
       if (confirmByUser) {
         await axios.delete(`http://localhost:3000/api/department/${_id}`, {
@@ -31,10 +34,14 @@ export const DepartmentActionButtons = ({ _id }) => {
           },
         });
       }
-
+      toast.success("Department Deleted Successfully");
       navigate(0);
     } catch (error) {
-      console.log(error);
+      if (error.response && !error.response.data.success) {
+        toast.error(error.response.data.error);
+      } else {
+        toast.error("Server Error");
+      }
     }
   };
 

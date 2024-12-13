@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 export const AddDepartment = () => {
   const [Department, SetDepartment] = useState({
@@ -18,7 +19,6 @@ export const AddDepartment = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // console.log(Department);
 
     try {
       const response = await axios.post(
@@ -32,10 +32,17 @@ export const AddDepartment = () => {
       );
       if (response.data.succes) {
         navigate("/admin-dashboard/departments");
+        toast.success("Department Added Successfully");
+        SetDepartment({
+          dep_name: "",
+          description: "",
+        });
       }
     } catch (error) {
       if (error.response && !error.response.data.succes) {
-        alert(error.response.data.error);
+        toast.error(error.response.data.error);
+      } else {
+        toast.error("Server Error");
       }
     }
   };

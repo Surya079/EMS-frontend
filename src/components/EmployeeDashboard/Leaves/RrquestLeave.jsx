@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useAuth } from "../../../Context/Auth_context";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 export const AddLeave = () => {
   const { user } = useAuth();
@@ -32,16 +33,16 @@ export const AddLeave = () => {
           },
         }
       );
-      console.log(response);
 
       if (response.data.success) {
-        navigate("/employee-dashboard/leaves");
+        toast.success("Leave Requested Successfully");
+        navigate(`/employee-dashboard/leaves/${user._id}`);
       }
     } catch (error) {
-      console.log(error.message);
-
       if (error.response && !error.response.data.success) {
-        console.log(error.response.data.error);
+        toast.error(error.response.data.error);
+      } else {
+        toast.error("Server Error");
       }
     }
   };

@@ -2,6 +2,7 @@ import axios from "axios";
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import LoadingOverlay from "../../LoadingOverlay/LoadingOverlay";
+import { toast } from "react-toastify";
 
 export const Profile = () => {
   const { id } = useParams();
@@ -25,7 +26,7 @@ export const Profile = () => {
         }
       } catch (error) {
         if (error.response && !error.response.data.success) {
-          alert(error.response.data.error);
+          toast.error(error.response.data.error);
         }
       } finally {
         setEmpLoading(false);

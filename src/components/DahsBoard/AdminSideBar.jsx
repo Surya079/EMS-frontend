@@ -68,8 +68,12 @@ export const AdminSideBar = () => {
           <span>Leaves</span>
         </NavLink>
         <NavLink
-          to={"/admin-dashboard"}
-          className={"flex items-center space-x-4 py-2.5 px-4 rounded"}>
+          to={"/admin-dashboard/settings"}
+          className={({ isActive }) =>
+            `${
+              isActive ? "bg-HeavyDark_green text-white" : " "
+            } flex items-center space-x-4 py-2.5 px-4 rounded`
+          }>
           <FaCogs />
           <span>Settings</span>
         </NavLink>

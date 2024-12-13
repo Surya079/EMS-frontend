@@ -2,6 +2,7 @@ import axios from "axios";
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import LoadingOverlay from "../LoadingOverlay/LoadingOverlay";
+import { toast } from "react-toastify";
 
 export const View = () => {
   const { id } = useParams();
@@ -21,13 +22,13 @@ export const View = () => {
           }
         );
         if (response.data.success) {
-          console.log(response.data.employee);
-
           setEmployee(response.data.employee);
         }
       } catch (error) {
         if (error.response && !error.response.data.success) {
-          alert(error.response.data.error);
+          toast.error(error.response.data.error);
+        } else {
+          toast.error("Server Error");
         }
       } finally {
         setEmpLoading(false);

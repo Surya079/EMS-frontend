@@ -39,7 +39,7 @@ export const EmployeeSidebar = () => {
           <span>My Profile</span>
         </NavLink>
         <NavLink
-          to={"/employee-dashboard/salary"}
+          to={`/employee-dashboard/salary/${user._id}`}
           className={({ isActive }) =>
             `${
               isActive ? "bg-HeavyDark_green text-white" : " "
@@ -49,7 +49,7 @@ export const EmployeeSidebar = () => {
           <span>Salary</span>
         </NavLink>
         <NavLink
-          to={"/employee-dashboard/leaves"}
+          to={`/employee-dashboard/leaves/${user._id}`}
           className={({ isActive }) =>
             `${
               isActive ? "bg-HeavyDark_green text-white" : " "
@@ -59,8 +59,12 @@ export const EmployeeSidebar = () => {
           <span>leaves</span>
         </NavLink>
         <NavLink
-          to={"/employee-dashboard"}
-          className={"flex items-center space-x-4 py-2.5 px-4 rounded"}>
+          to={"/employee-dashboard/settings"}
+          className={({ isActive }) =>
+            `${
+              isActive ? "bg-HeavyDark_green text-white" : " "
+            } flex items-center space-x-4 py-2.5 px-4 rounded`
+          }>
           <FaCogs />
           <span>Settings</span>
         </NavLink>

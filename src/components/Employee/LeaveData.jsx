@@ -2,50 +2,51 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import DataTable from "react-data-table-component";
 import { useParams } from "react-router-dom";
-import { salaryColumn } from "../../utils/EmployeeHelper";
+import { empColumns } from "../../utils/LeaveEmpHelper";
 import { toast } from "react-toastify";
 import LoadingOverlay from "../LoadingOverlay/LoadingOverlay";
 
-export const SalaryData = () => {
+export const LeaveData = () => {
   const { id } = useParams();
-  const [employeeName, setEmployeeName] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-  const [salaryData, setSalarydata] = useState([]);
+  const [isLoading, setIsloading] = useState(false);
+  const [leavedata, setLeavedata] = useState([]);
 
   useEffect(() => {
-    const fetchSalarydata = async () => {
+    const fetchLeavedata = async () => {
       try {
-        setIsLoading(true);
+        setIsloading(true);
         const response = await axios.get(
-          `http://localhost:3000/api/salary/employee/${id}`,
+          `http://localhost:3000/api/leave/employee/${id}`,
           {
             headers: {
               Authorization: `Bearer ${localStorage.getItem("token")}`,
             },
           }
         );
-
         if (response.data.success) {
           let sno = 1;
-          const data = response.data.salaryData.map((sal) => ({
+          const data = response.data.leaves.map((lev) => ({
+            _id: lev._id,
             sno: sno++,
-            ...sal,
+            leaveType: lev.leaveType,
+            startDate: lev.startDate,
+            endDate: lev.endDate,
+            comments: lev.comments,
+            status: lev.status,
           }));
-
-          setSalarydata(data);
-          setEmployeeName(response.data.salaryData[0].employeeName);
-          setIsLoading(false);
+          setLeavedata(data);
+          setIsloading(false);
         }
       } catch (error) {
         if (error.response && !error.response.data.success) {
           toast.error(error.response.data.error);
         }
       } finally {
-        setIsLoading(false);
+        setIsloading(false);
       }
     };
 
-    fetchSalarydata();
+    fetchLeavedata();
   }, [id]);
 
   return isLoading ? (
@@ -53,15 +54,10 @@ export const SalaryData = () => {
   ) : (
     <div className="mt-4">
       <h1 className="font-bold text-center text-2xl flex gap-2 justify-content flex-col">
-        <span
-          style={{ textShadow: "2px 2px 2px gray" }}
-          className="text-red-400 text-3xl">
-          {employeeName}
-        </span>
-        Salary History
+        Leave History
       </h1>
       <div>
-        <DataTable columns={salaryColumn} data={salaryData} />
+        <DataTable columns={empColumns} data={leavedata} />
       </div>
     </div>
   );

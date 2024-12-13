@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, { useContext, useEffect, useState } from "react";
 import { createContext } from "react";
+import { toast } from "react-toastify";
 
 const userContext = createContext();
 
@@ -18,7 +19,7 @@ export const Auth_context = ({ children }) => {
             "http://localhost:3000/api/auth/verify",
             {
               headers: {
-                Authorization: `Bearer ${token}`, // Bearer token sent to the server
+                Authorization: `Bearer ${token}`, // The "Bearer" keyword is used to indicate that the token is a Bearer token. This is a security feature to prevent malicious actors from using the token without knowing it is a Bearer token.
               },
             }
           );
@@ -33,8 +34,10 @@ export const Auth_context = ({ children }) => {
         }
       } catch (error) {
         setUser(null);
-        alert(error.response.data.error)
-        console.error("Error during token verification:", error);
+
+        if (error.response && !error.response.data.success) {
+          toast.error(error.response.data.error);
+        }
       } finally {
         setLoading(false);
       }
@@ -60,4 +63,3 @@ export const Auth_context = ({ children }) => {
   );
 };
 export const useAuth = () => useContext(userContext);
-

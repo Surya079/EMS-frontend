@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { columns, EmployeeActions } from "../../utils/EmployeeHelper";
 import axios from "axios";
 import LoadingOverlay from "../LoadingOverlay/LoadingOverlay";
+import { toast } from "react-toastify";
 
 function List() {
   const [employees, setEmployees] = useState([]);
@@ -42,7 +43,7 @@ function List() {
         }
       } catch (error) {
         if (error.response && !error.response.data.success) {
-          alert(error.response.data.error);
+          toast.error(error.response.data.error);
         }
       } finally {
         setIsLoading(false);

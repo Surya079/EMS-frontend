@@ -3,6 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { fetchDepartments } from "../../utils/EmployeeHelper";
 import axios from "axios";
 import LoadingOverlay from "../LoadingOverlay/LoadingOverlay";
+import { toast } from "react-toastify";
 
 export const Edit = () => {
   const { id } = useParams();
@@ -33,8 +34,6 @@ export const Edit = () => {
         );
 
         if (response.data.success) {
-          console.log(response.data.employee.department.dep_name);
-
           setEmployee({
             maritalStatus: response.data.employee.maritalStatus,
             designation: response.data.employee.designation,
@@ -43,7 +42,11 @@ export const Edit = () => {
           });
         }
       } catch (error) {
-        SetIsError(error.response.error);
+        if (error.response && !error.response.data.success) {
+          toast.error(error.response.data.error);
+        } else {
+          toast.error("Server Error");
+        }
       } finally {
         setIsLoading(false);
       }
@@ -71,10 +74,13 @@ export const Edit = () => {
 
       if (response.data.success) {
         navigate("/admin-dashboard/employees");
+        toast.success("Employee updated Successfully");
       }
     } catch (error) {
       if (error.response && !error.response.data.success) {
-        alert(error.response.data.message);
+        toast.error(error.response.data.message);
+      } else {
+        toast.error("Server Error");
       }
     }
   };
@@ -89,9 +95,7 @@ export const Edit = () => {
   ) : (
     <div className="max-w-4xl mx-auto  rounded-md shadow-md p-8">
       <h2 className="text-2xl text-center mb-10 font-bold ">Edit Employee</h2>
-      {isError && (
-        <p className="text-red-600 text-center mb-3 pb-3">{isError}</p>
-      )}
+
       <form onSubmit={handleSubmit} className="grid grid-cols-1 gap-2 ">
         {/* Name */}
         <div className="grid grid-cols-1 justify-center items-center md:grid-cols-2 gap-3">

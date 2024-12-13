@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import LoadingOverlay from "../LoadingOverlay/LoadingOverlay";
+import { toast } from "react-toastify";
 
 export const EditDepartment = () => {
   const { id } = useParams();
@@ -32,11 +33,10 @@ export const EditDepartment = () => {
             description: response.data.department.description,
           });
         } else {
-          console.error("API did not return department data");
+          toast.error("API did not return department data");
         }
       } catch (error) {
-        console.error("Error fetching department:", error);
-        alert("Could not load department data.");
+        toast.error("Could not load department data.");
       } finally {
         setDeploading(false);
       }
@@ -64,10 +64,13 @@ export const EditDepartment = () => {
       );
       if (response.data.succes) {
         navigate("/admin-dashboard/departments");
+        toast.success("Department Updated Successfully");
       }
     } catch (error) {
       if (error.response && !error.response.data.success) {
-        alert(error.response.data.error);
+        toast.error(error.response.data.error);
+      } else {
+        toast.error("Server Error");
       }
     }
   };

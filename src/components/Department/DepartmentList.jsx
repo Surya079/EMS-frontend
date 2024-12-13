@@ -4,6 +4,7 @@ import axios from "axios";
 import DataTable from "react-data-table-component";
 import { columns, DepartmentActionButtons } from "../../utils/DepartmentHelper";
 import LoadingOverlay from "../LoadingOverlay/LoadingOverlay";
+import { toast } from "react-toastify";
 
 export const DepartmentList = () => {
   const [departments, setDepartments] = useState([]);
@@ -36,7 +37,9 @@ export const DepartmentList = () => {
         }
       } catch (error) {
         if (error.response && !error.response.data.success) {
-          alert(error.response.data.error);
+          toast.error(error.response.data.error);
+        } else {
+          toast.error("Server Error");
         }
       } finally {
         setdepLoading(false);

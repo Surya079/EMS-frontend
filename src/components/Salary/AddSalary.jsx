@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { fetchDepartments, fetchEmployee } from "../../utils/EmployeeHelper";
 import axios from "axios";
-import { HiCheckCircle } from "react-icons/hi";
+
+import { toast } from "react-toastify";
 
 export const AddSalary = () => {
   const [departments, setDepartments] = useState([]);
   const [employees, setEmployees] = useState([]);
-  const [isSalaryadded, setisSalaryadded] = useState(false);
   const [salaries, setSalaries] = useState({
     employeeId: null,
     basicSalary: 0,
@@ -59,21 +59,28 @@ export const AddSalary = () => {
       );
 
       if (response.data.success) {
-        setisSalaryadded(true);
+        toast.success("Salary Added Successfully");
+        setSalaries({
+          employeeId: null,
+          basicSalary: 0,
+          allowances: 0,
+          deductions: 0,
+          payDate: null,
+        });
       }
     } catch (error) {
-      console.log("Error while adding salary", error);
+      if (error.response && !error.response.data.success) {
+        toast.error(error.response.data.error);
+      } else {
+        toast.error("Server Error");
+      }
     }
   };
 
   return departments && employees ? (
     <div className="max-w-4xl mx-auto mt-2 rounded-md shadow-md p-8">
       <h2 className="text-2xl font-bold mb-6 text-center">Salary management</h2>
-      {isSalaryadded && (
-        <div className="text-green-500 text-center ">
-          <HiCheckCircle className="bg-green-500" /> Salary Added Successfully
-        </div>
-      )}
+
       <form onSubmit={handleSubmit} className="grid grid-cols-1 gap-2 ">
         {/* Name */}
         <div className="grid grid-cols-1 justify-center items-center md:grid-cols-2 gap-3">

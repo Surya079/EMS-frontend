@@ -2,13 +2,13 @@ import axios from "axios";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../Context/Auth_context";
+import { toast, ToastContainer } from "react-toastify";
 
 export const Login = () => {
   const [LoginData, setLoginData] = useState({
     email: "",
     password: "",
   });
-  const [error, setError] = useState(null);
   const navigate = useNavigate();
   const { login } = useAuth();
 
@@ -34,7 +34,7 @@ export const Login = () => {
       });
 
       if (response.data.success) {
-        // console.log(response.data.user);
+        toast.success("Login Successfully");
         login(response.data.user);
         localStorage.setItem("token", response.data.token);
         if (response.data.user.role === "admin") {
@@ -43,16 +43,11 @@ export const Login = () => {
           navigate("/employee-dashboard");
         }
       }
-      // console.log(response);
     } catch (error) {
-      console.log(error);
       if (error.response && !error.response.data.success) {
-        setError(error.response.data.error);
-        setTimeout(() => {
-          setError("");
-        }, 1000);
+        toast.error(error.response.data.error);
       } else {
-        setError("Server error");
+        toast.error("Something went wrong");
       }
     }
   };
@@ -62,11 +57,11 @@ export const Login = () => {
       <h2 className=" text-4xl max-[450px]:text-center max-[450px]:p-1  font-poppins text-white ">
         Employee Management System
       </h2>
-
+      <ToastContainer />
       <div className="border shadow p-6 w-80 bg-white">
         <form onSubmit={handleSubmit}>
           <h2 className="text-2xl font-bold mb-4 text-center">Login</h2>
-          {error && <p className="text-red-500 text-center">{error}</p>}
+
           <div className="mb-4">
             <label htmlFor="email" className="block text-gray-700">
               Email
