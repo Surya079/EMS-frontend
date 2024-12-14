@@ -106,7 +106,7 @@ export const LeaveViews = () => {
                 Start Date: {new Date(leaveDetails?.startDate).toDateString()}
               </p>
               <p className="text-lg font-semibold">
-                Start Date: {new Date(leaveDetails?.endDate).toDateString()}
+                End Date: {new Date(leaveDetails?.endDate).toDateString()}
               </p>
               <p className="text-lg flex flex-row gap-2 font-semibold">
                 <p>
